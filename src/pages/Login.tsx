@@ -144,14 +144,17 @@ export default function Login() {
         {/* Mobile-only compact header, since the card panel is hidden below md */}
         <div className="md:hidden absolute top-0 left-0 right-0 flex items-center justify-between px-5 py-4 animate-header-in" style={{ background: '#04512E' }}>
           <div className="flex items-center gap-2">
-            <div className="h-11 w-11 flex items-center justify-center bg-white rounded-lg p-1.5">
+            <div className="h-11 w-11 flex items-center justify-center bg-white rounded-lg p-1.5 shrink-0">
               <img src={hyprepLogo} alt="HYPREP" className="max-h-full max-w-full object-contain" />
             </div>
-            <span className="text-white text-sm font-semibold" style={{ fontFamily: 'Georgia, serif' }}>
+            <div className="h-11 w-11 flex items-center justify-center bg-white/95 rounded-lg p-1.5 shrink-0">
+              <img src={mrsoftLogo} alt="MRSoft" className="max-h-full max-w-full object-contain" />
+            </div>
+            <span className="text-white text-sm font-semibold whitespace-nowrap" style={{ fontFamily: 'Georgia, serif' }}>
               Training Portal
             </span>
           </div>
-          <div className="flex h-1 w-12 rounded-full overflow-hidden">
+          <div className="flex h-1 w-12 rounded-full overflow-hidden shrink-0">
             <div className="flex-1" style={{ background: '#008751' }} />
             <div className="flex-1" style={{ background: '#FFFFFF' }} />
             <div className="flex-1" style={{ background: '#C8102E' }} />
