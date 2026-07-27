@@ -151,7 +151,7 @@ export default function Login() {
               <img src={mrsoftLogo} alt="MRSoft" className="max-h-full max-w-full object-contain" />
             </div>
             <span className="text-white text-sm font-semibold whitespace-nowrap" style={{ fontFamily: 'Georgia, serif' }}>
-              Training Portal
+              Training Material Portal
             </span>
           </div>
           <div className="flex h-1 w-12 rounded-full overflow-hidden shrink-0">
