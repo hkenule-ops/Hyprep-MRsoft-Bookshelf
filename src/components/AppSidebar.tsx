@@ -57,8 +57,13 @@ export function AppSidebar() {
           {/* Dual logo area */}
           <div className="flex flex-col items-center justify-center pt-5 pb-4 mb-2 border-b border-white/10 gap-3 animate-fade-up">
             {collapsed ? (
-              <div className="h-10 w-10 flex items-center justify-center bg-white rounded-lg p-1.5 shadow-md">
-                <img src={hyprepLogo} alt="HYPREP" className="max-h-full max-w-full object-contain" />
+              <div className="flex flex-col items-center gap-1.5">
+                <div className="h-9 w-9 flex items-center justify-center bg-white rounded-lg p-1 shadow-md">
+                  <img src={hyprepLogo} alt="HYPREP" className="max-h-full max-w-full object-contain" />
+                </div>
+                <div className="h-9 w-9 flex items-center justify-center bg-white/95 rounded-lg p-1 shadow-sm">
+                  <img src={mrsoftLogo} alt="MRSoft" className="max-h-full max-w-full object-contain" />
+                </div>
               </div>
             ) : (
               <>

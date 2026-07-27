@@ -101,12 +101,12 @@ export default function StudentDashboard() {
         style={{ background: c.headerGlass, borderBottom: '1px solid rgba(255,255,255,0.14)' }}
       >
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3 min-w-0">
-            <div className="h-14 w-14 shrink-0 flex items-center justify-center bg-white rounded-xl p-2 shadow-md transition-transform duration-200 hover:scale-105">
+          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+            <div className="h-11 w-11 sm:h-14 sm:w-14 shrink-0 flex items-center justify-center bg-white rounded-xl p-1.5 sm:p-2 shadow-md transition-transform duration-200 hover:scale-105">
               <img src={hyprepLogo} alt="HYPREP" className="max-h-full max-w-full object-contain" />
             </div>
-            <div className="hidden sm:block h-9 w-px" style={{ background: 'rgba(255,255,255,0.2)' }} />
-            <div className="h-14 w-14 shrink-0 hidden sm:flex items-center justify-center bg-white/95 rounded-xl p-2 shadow-sm transition-transform duration-200 hover:scale-105">
+            <div className="hidden xs:block sm:block h-9 w-px" style={{ background: 'rgba(255,255,255,0.2)' }} />
+            <div className="h-11 w-11 sm:h-14 sm:w-14 shrink-0 flex items-center justify-center bg-white/95 rounded-xl p-1.5 sm:p-2 shadow-sm transition-transform duration-200 hover:scale-105">
               <img src={mrsoftLogo} alt="MRSoft" className="max-h-full max-w-full object-contain" />
             </div>
             <span
