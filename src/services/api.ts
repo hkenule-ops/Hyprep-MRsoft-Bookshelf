@@ -1,7 +1,7 @@
-import type { ApiResponse, Book, Category, LoginResponse, User } from '@/types';
+import type { ApiResponse, Book, Category, User } from '@/types';
 
 // Set this to your deployed Google Apps Script Web App URL
-const API_BASE = 'https://script.google.com/macros/s/AKfycbyQaLNEvq0NCw3SLY05DdioB625_RORCshDmtIDwHEl8DruL6jpFbhV35MRIrt9tM8jiA/exec';
+const API_BASE = 'https://script.google.com/macros/s/AKfycbwfLKtJTlxoW-4dY8C0Xj8Ryo3q3D1jehVdaRcLuwtuA5KooU0h-2aDA7qm5G_VXKmnIg/exec';
 
 async function request<T>(action: string, params: Record<string, unknown> = {}): Promise<ApiResponse<T>> {
   if (!API_BASE) {
@@ -23,14 +23,19 @@ async function request<T>(action: string, params: Record<string, unknown> = {}):
 
 export const api = {
 
-  // Auth
-  login(email: string, pin: string) {
-    return request<{ user: User }>('login', { email, pin });
+  // Auth — accepts email OR phone in the "identifier" field
+  login(identifier: string, pin: string) {
+    return request<{ user: User }>('login', { identifier, pin });
   },
 
-  // Users
-  createUser(email: string, categories: string[], name: string) { // name is now required
-    return request<{ user: User; pin: string }>('createUser', { email, categories, name });
+  // Users — email and/or phone (at least one required on backend)
+  createUser(email: string, phone: string, categories: string[], name: string) {
+    return request<{ user: User; pin: string }>('createUser', {
+      email: email || '',
+      phone: phone || '',
+      categories,
+      name,
+    });
   },
 
   getUsers() {

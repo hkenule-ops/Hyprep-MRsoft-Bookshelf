@@ -10,7 +10,7 @@ import mrsoftLogo from '@/images/mrsoft logo.svg';
 import hyprepLogo from '@/images/hyprep-logo.svg';
 
 export default function Login() {
-  const [email, setEmail] = useState('');
+  const [identifier, setIdentifier] = useState('');
   const [pin, setPin] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPin, setShowPin] = useState(false);
@@ -19,13 +19,13 @@ export default function Login() {
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email.trim() || !pin.trim()) {
-      toast.error('Please enter both email and PIN');
+    if (!identifier.trim() || !pin.trim()) {
+      toast.error('Please enter your email/phone and PIN');
       return;
     }
 
     setLoading(true);
-    const res = await api.login(email.trim(), pin.trim());
+    const res = await api.login(identifier.trim(), pin.trim());
     setLoading(false);
 
     if (res.success && res.data?.user) {
@@ -47,7 +47,6 @@ export default function Login() {
         className="hidden md:flex md:w-[42%] lg:w-[38%] relative flex-col justify-between overflow-hidden animate-card-in"
         style={{ background: 'linear-gradient(165deg, #063D26 0%, #04512E 45%, #04663A 100%)' }}
       >
-        {/* Perforated edge separating card from form, like a tear-off ID stub */}
         <div
           className="absolute top-0 right-0 h-full w-px"
           style={{
@@ -56,7 +55,6 @@ export default function Login() {
           }}
         />
 
-        {/* faint watermark ring, echoes a security seal, drifts slowly */}
         <div
           className="absolute -right-24 top-1/2 -translate-y-1/2 w-80 h-80 rounded-full border animate-seal-spin"
           style={{ borderColor: 'rgba(255,255,255,0.08)', borderWidth: '18px', borderStyle: 'dashed' }}
@@ -66,7 +64,6 @@ export default function Login() {
           style={{ background: 'rgba(255,255,255,0.04)' }}
         />
 
-        {/* Top: eyebrow + logos */}
         <div className="relative z-10 px-9 pt-9">
           <div className="flex items-center gap-2 mb-7 animate-fade-up" style={{ animationDelay: '0.05s' }}>
             <ShieldCheck className="h-3.5 w-3.5 animate-seal-pulse" style={{ color: '#F2C14E' }} strokeWidth={2.5} />
@@ -88,7 +85,6 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Middle: the "card" identity block */}
         <div className="relative z-10 px-9">
           <h1
             className="text-white font-bold leading-[1.08] mb-4 animate-fade-up"
@@ -99,14 +95,13 @@ export default function Login() {
             Portal
           </h1>
           <p className="text-sm leading-relaxed max-w-[26ch] animate-fade-up" style={{ color: 'rgba(255,255,255,0.78)', animationDelay: '0.22s' }}>
-            Sign in with your registered email and PIN to reach your training materials and assessments.
+            Sign in with your registered email or phone number and PIN to reach your training materials.
           </p>
 
-          {/* card field rows, styled like printed ID card data, print in one at a time */}
           <div className="mt-8 space-y-3 max-w-[280px]">
             {[
               ['Programme', 'HYPREP Capacity Building'],
-              ['Access Mode', 'Email + PIN'],
+              ['Access Mode', 'Email / Phone + PIN'],
               ['Status', 'Active'],
             ].map(([label, value], i) => (
               <div
@@ -123,7 +118,6 @@ export default function Login() {
           </div>
         </div>
 
-        {/* Bottom: tricolor strip carrying the logo's red / white / green */}
         <div className="relative z-10 px-9 pb-9">
           <div
             className="flex h-1.5 w-full rounded-full overflow-hidden mb-3 animate-strip-in"
@@ -141,7 +135,6 @@ export default function Login() {
 
       {/* ============ RIGHT: FORM PANEL ============ */}
       <div className="flex-1 flex items-center justify-center px-6 sm:px-10 py-8 relative">
-        {/* Mobile-only compact header, since the card panel is hidden below md */}
         <div className="md:hidden absolute top-0 left-0 right-0 flex items-center justify-between px-5 py-4 animate-header-in" style={{ background: '#04512E' }}>
           <div className="flex items-center gap-2">
             <div className="h-11 w-11 flex items-center justify-center bg-white rounded-lg p-1.5 shrink-0">
@@ -173,21 +166,21 @@ export default function Login() {
               Welcome back
             </h2>
             <p className="text-sm mt-1.5 animate-fade-up" style={{ color: '#5B6B63', animationDelay: '0.28s' }}>
-              Enter your email and PIN to continue.
+              Enter your email or phone number and PIN to continue.
             </p>
           </div>
 
           <form onSubmit={handleLogin} className="space-y-5">
             <div className="animate-fade-up" style={{ animationDelay: '0.34s' }}>
               <label className="text-sm font-medium mb-1.5 block" style={{ color: '#33403A' }}>
-                Email address
+                Email or Phone Number
               </label>
               <Input
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoComplete="email"
+                type="text"
+                placeholder="you@example.com or 08012345678"
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                autoComplete="username"
                 className="h-11 border-gray-200 transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:-translate-y-0.5"
                 style={{ ['--tw-ring-color' as string]: '#008751' }}
               />

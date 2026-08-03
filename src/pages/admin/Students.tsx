@@ -12,7 +12,7 @@ import { Badge } from '@/components/ui/badge';
 import type { User, Category } from '@/types';
 
 const GREEN = '#008751';
-const RED = '#C8102E'; // reserved exclusively for delete (destructive) and the required-field marker
+const RED = '#C8102E';
 
 export default function ManageStudents() {
   const { theme } = useTheme();
@@ -21,6 +21,7 @@ export default function ManageStudents() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
   const [name, setName] = useState('');
   const [selectedCats, setSelectedCats] = useState<string[]>([]);
   const [creating, setCreating] = useState(false);
@@ -70,15 +71,19 @@ export default function ManageStudents() {
   }, [categories]);
 
   const handleCreate = async () => {
-    if (!email.trim()) { toast.error('Email is required'); return; }
     if (!name.trim()) { toast.error('Name is required'); return; }
+    if (!email.trim() && !phone.trim()) {
+      toast.error('Provide either an email or a phone number');
+      return;
+    }
     setCreating(true);
-    const res = await api.createUser(email.trim(), selectedCats, name.trim());
+    const res = await api.createUser(email.trim(), phone.trim(), selectedCats, name.trim());
     setCreating(false);
     if (res.success && res.data) {
       setNewPin(res.data.pin);
       toast.success('Trainee created');
       setEmail('');
+      setPhone('');
       setName('');
       setSelectedCats([]);
       load();
@@ -132,6 +137,7 @@ export default function ManageStudents() {
 
   const filtered = students.filter((s) =>
     s.email.toLowerCase().includes(search.toLowerCase()) ||
+    (s.phone && s.phone.toLowerCase().includes(search.toLowerCase())) ||
     (s.name && s.name.toLowerCase().includes(search.toLowerCase()))
   );
 
@@ -197,15 +203,26 @@ export default function ManageStudents() {
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium mb-1.5 block">Email <span style={{ color: RED }}>*</span></label>
+                  <label className="text-sm font-medium mb-1.5 block">Email</label>
                   <Input
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="trainee@example.com"
+                    placeholder="optional@example.com"
                     maxLength={255}
                   />
                 </div>
+                <div>
+                  <label className="text-sm font-medium mb-1.5 block">Phone Number</label>
+                  <Input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="08012345678"
+                    maxLength={20}
+                  />
+                </div>
+                <p className="text-xs" style={{ color: c.muted }}>Provide at least one of email or phone number.</p>
                 <div>
                   <label className="text-sm font-medium mb-1.5 block">Assign Course</label>
                   <div className="space-y-2 max-h-40 overflow-auto">
@@ -231,7 +248,7 @@ export default function ManageStudents() {
       <div className="relative max-w-sm animate-fade-up" style={{ animationDelay: '0.06s' }}>
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: c.muted }} />
         <Input
-          placeholder="Search trainees by name or email..."
+          placeholder="Search by name, email or phone..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="pl-9 backdrop-blur-md transition-all duration-200 focus-visible:ring-2 focus-visible:ring-offset-1 focus-visible:-translate-y-0.5"
@@ -283,8 +300,12 @@ export default function ManageStudents() {
                           <div className="space-y-1 min-w-0">
                             <p className="font-medium truncate" style={{ color: c.ink }}>
                               {s.name && <span>{s.name}</span>}
-                              {s.name && <span className="text-sm ml-2" style={{ color: c.muted }}>({s.email})</span>}
-                              {!s.name && <span>{s.email}</span>}
+                              {(s.email || s.phone) && (
+                                <span className="text-sm ml-2" style={{ color: c.muted }}>
+                                  ({[s.email, s.phone].filter(Boolean).join(' · ')})
+                                </span>
+                              )}
+                              {!s.name && !s.email && !s.phone && <span>—</span>}
                             </p>
                             <div className="flex flex-wrap gap-1">
                               {s.categories.length === 0 ? (
@@ -322,7 +343,7 @@ export default function ManageStudents() {
           <DialogHeader><DialogTitle style={{ fontFamily: 'Georgia, serif' }}>PIN Reset Successful!</DialogTitle></DialogHeader>
           <div className="space-y-4 text-center">
             <p className="text-sm" style={{ color: c.muted }}>
-              New PIN for {resetPinUser?.name || resetPinUser?.email}:
+              New PIN for {resetPinUser?.name || resetPinUser?.email || resetPinUser?.phone}:
             </p>
             <div className="flex items-center justify-center gap-2">
               <code className="text-2xl font-mono font-bold px-4 py-2 rounded-lg" style={{ background: c.codeBg, color: c.codeText }}>
@@ -342,7 +363,7 @@ export default function ManageStudents() {
       {/* Assign Dialog */}
       <Dialog open={!!assignUser} onOpenChange={(v) => { if (!v) setAssignUser(null); }}>
         <DialogContent>
-          <DialogHeader><DialogTitle style={{ fontFamily: 'Georgia, serif' }}>Assign Categories – {assignUser?.name || assignUser?.email}</DialogTitle></DialogHeader>
+          <DialogHeader><DialogTitle style={{ fontFamily: 'Georgia, serif' }}>Assign Categories — {assignUser?.name || assignUser?.email || assignUser?.phone}</DialogTitle></DialogHeader>
           <div className="space-y-4">
             <div className="space-y-2 max-h-60 overflow-auto">
               {categories.map((cat) => (
